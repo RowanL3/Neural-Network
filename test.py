@@ -1,7 +1,7 @@
 import random
 
 from data import Database
-from nn_ import Network, loss
+from neural_network import Network, loss
 
 nn = Network((4,5,3))
 

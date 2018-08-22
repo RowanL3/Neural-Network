@@ -23,14 +23,16 @@ class Neuron():
         dot = sum([x*y for (x,y) in zip(inputs, self.weights)])
         self.output = sigmoid(dot) 
         return self.output
-    
-    def backpropagate(self, inputs, error)
-        gradient = error * sigmoid_prime(neuron.output)
-        for i, inp in enumerate(inputs):
-            neuron.nudge_weight(i, gradient * inp)
-            next_error_values.append(neuron.weights[i]  * gradient)
 
-        return next_error_values
+    def backpropagate(self, inputs, error):
+        error_values = list()
+        gradient = error * sigmoid_prime(self.output)
+        for i, inp in enumerate(inputs):
+            self.nudge_weight(i, gradient * inp)
+            error_values.append(self.weights[i]  * gradient)
+
+        return error_values
+    
     def nudge_weight(self, weight, amount):
         change = amount * Neuron.learning_rate
         self.momentum[weight] += change
@@ -39,7 +41,6 @@ class Neuron():
 
 class Network():
     def __init__(self, topology):
-        self.topology = topology
         self.layers = list()
         for i in range(1,len(topology)):
             self.layers.append([Neuron(topology[i-1]) for _ in range(topology[i])])
@@ -58,7 +59,12 @@ class Network():
         self.backpropagate_layer(0, error_values, data)
 
     def backpropagate_layer(self, layer, error_values, inputs):
-        next_error_values = list()
-        # Output layer
+        next_errors = list()
         for neuron, error in zip(self.layers[layer], error_values):
-            neuron.backpropagate(neuron,error,inputs)
+            bp_error = neuron.backpropagate(inputs,error)
+            if not next_errors:
+                next_errors = bp_error
+            else:
+                next_errors = [a+b for a,b in zip(next_errors,bp_error)]
+
+        return next_errors
