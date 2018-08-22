@@ -16,7 +16,6 @@ class Neuron():
 
     def __init__(self, input_neurons):
         self.weights = [random.uniform(-1,1) for _ in range(input_neurons)]
-        self.momentum = 0
 
     def forward(self, inputs):
         dot = sum([x*y for (x,y) in zip(inputs, self.weights)])
@@ -33,9 +32,8 @@ class Network():
 
     def forward(self, data):
         self.layer_outputs = [data]
-        output = data
         for layer in self.layers:
-            output = [neuron.forward(output) for neuron in layer]
+            output = [neuron.forward(self.layer_outputs[-1]) for neuron in layer]
             self.layer_outputs.append(output)
         return output
         
@@ -56,35 +54,3 @@ class Network():
                 next_error_values.append(neuron.weights[i]  * gradient)
 
         return next_error_values
-
-
-training_db = data.Database("iris_data_training.txt")
-
-nn = Network((4,5,5,7,3))
-
-
-num_enocs = 1000
-
-for _ in range(num_enocs):
-    training_db.shuffle()
-    results = list()
-    for row in training_db.rows:
-        row.output_vect = nn.forward(row.normalized)
-        nn.backpropagate(row.normalized, row.type_vect)
-    total_loss = sum([loss(row.type_vect, row.output_vect) for row in training_db.rows])
-    print("training loss: " + str(total_loss))
-
-
-print("Testing: ")
-testing_db = data.Database("iris_data_testing.txt")
-
-num_correct = 0
-for row in testing_db.rows:
-    output = nn.forward(row.normalized)
-    l = [int(x == max(output)) for x in output]
-    if l == row.type_vect:
-        num_correct += 1
-
-print("  {} / {} correctly identified".format(num_correct,len(testing_db.rows)))
-
-    
