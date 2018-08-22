@@ -9,13 +9,13 @@ class Row():
                                             self.type == "Iris-versicolor",
                                             self.type == "Iris-virginica")]
 
-class Data():
-    def __init__(self):
+class Database():
+    def __init__(self, filename):
         self.rows = list()
         self.col_max = list()
         self.col_min = list()
 
-        with open("iris_data.txt") as d:
+        with open(filename) as d:
             for line in d.readlines():
                 self.rows.append(Row(line))
 
