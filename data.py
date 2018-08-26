@@ -5,9 +5,17 @@ class Row():
     def __init__(self, text):
         self.cells = [float(x) for x in text.split(",")[:-1]]
         self.type = text.split(",")[-1].strip()
+
+        # Generalize this for floats (first make a list of all possible classes)
         self.type_vect = [int(x) for x in (self.type == "Iris-setosa",
                                             self.type == "Iris-versicolor",
                                             self.type == "Iris-virginica")]
+
+        
+    def match(guess):
+        polarized_guess = [int(v == max(guess)) for v in guess]
+        return self.type_vect == polarized_guess
+
 
 class Database():
     def __init__(self, filename):
@@ -25,7 +33,6 @@ class Database():
 
         for row in self.rows:
             row.normalized = [self.normalize_cell(i,cell) for (i,cell) in enumerate(row.cells)]
-            
         self.shuffle()
 
     def shuffle(self):

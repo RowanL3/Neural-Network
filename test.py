@@ -4,18 +4,22 @@ from copy import deepcopy
 from data import Database
 from neural_network import Network, loss
 
+# --- Deprecated ---
+# Use ten_fold.py instead
+
 nn = Network((4,4,5,3))
 
 training_db = Database("iris_data_training.txt")
 print("Training ({} samples): ".format(len(training_db.rows)))
 
-num_epoch = 250
+num_epoch = 100
 num_reports = 10
 n = num_epoch / num_reports
 
 min_loss = 5000
 min_nn = nn
 min_epoch = 0
+
 for epoch in range(num_epoch):
     training_db.shuffle()
     results = list()
