@@ -53,7 +53,7 @@ def run(num_epoch, training, testing):
     num_correct = 0
     for row in testing:
         output = min_nn.forward(row.normalized)
-        if output == row.matches(output):
+        if row.matches(output):
             num_correct += 1
      
     say("  {} / {} correctly identified".format(num_correct,len(testing)))

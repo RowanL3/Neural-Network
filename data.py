@@ -12,7 +12,7 @@ class Row():
                                             self.type == "Iris-virginica")]
 
         
-    def match(guess):
+    def matches(self,guess):
         polarized_guess = [int(v == max(guess)) for v in guess]
         return self.type_vect == polarized_guess
 
